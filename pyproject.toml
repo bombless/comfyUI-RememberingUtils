@@ -1,0 +1,14 @@
+[project]
+name = "comfyui-rememberingutils"
+description = ""
+version = "1.0.0"
+license = {file = "LICENSE"}
+
+[project.urls]
+Repository = "https://github.com/bombless/comfyUI-RememberingUtils"
+#  Used by Comfy Registry https://comfyregistry.org
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "comfyUI-RememberingUtils"
+Icon = ""
