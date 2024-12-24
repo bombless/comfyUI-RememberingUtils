@@ -9,6 +9,6 @@ Repository = "https://github.com/bombless/comfyUI-RememberingUtils"
 #  Used by Comfy Registry https://comfyregistry.org
 
 [tool.comfy]
-PublisherId = ""
+PublisherId = "bombless"
 DisplayName = "comfyUI-RememberingUtils"
 Icon = ""
