@@ -33,7 +33,7 @@ function drawTextWithLineBreaks(ctx, text, x, y, maxWidth, lineHeight) {
 app.registerExtension({
   name: "RememberingUtils",
   async beforeRegisterNodeDef(nodeType, nodeData, app) {
-    if (nodeData.python_module !== "custom_nodes.RememberingUtils") return;
+    if (nodeData.python_module !== "custom_nodes.comfyUI-RememberingUtils") return;
     nodeType.prototype.onDrawForeground = function(ctx, graphcanvas) {
       //console.log(arguments)
       if (this.flags.collapsed) return;
@@ -47,11 +47,11 @@ app.registerExtension({
       }
       ctx.restore();
     }
-    nodeType.prototype.onGetInputs = function() {
+    nodeType.prototype.onAdded = function() {
       // handle the situation when node is freshly added
+      //console.log('onAdded', 'id', this.id, 'type', this.type);
       const {id, properties} = this;
       propertiesMapping[id] = properties;
-      node_callback(this);
     };
     api.addEventListener('RememberingUtils:change', function(data) {
       //console.log('RememberingUtils:change', data.detail)
@@ -64,19 +64,22 @@ app.registerExtension({
       // console.log('next', properties.next);
     });
     api.addEventListener('progress', function({detail}) {
+      //console.log('progress', detail);
       if (detail.value < detail.max) return;
       Object.values(propertiesMapping).forEach(v => {
+        //console.log('from', v.curr, 'to', v.next);
         v.curr = v.next;
-      })
-      // console.log('propertiesMapping', propertiesMapping)
-    })
+      });
+      // console.log('propertiesMapping', propertiesMapping);
+    });
   },
   async nodeCreated(node) {
     nodes.push(node);
   },
   async setup() {
     nodes.forEach(node => {
-      const {id, properties} = node;
+      const {id, properties, type} = node;
+      if (!['ShowLastText', 'ShowLastSeed', 'RememberLastSeed'].includes(type)) return;
       propertiesMapping[id] = properties;
     });
   },
