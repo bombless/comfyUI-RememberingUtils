@@ -1,6 +1,6 @@
 [project]
 name = "comfyui-rememberingutils"
-description = ""
+description = "Helper nodes to display last seed and prompt."
 version = "1.0.2"
 license = {file = "LICENSE"}
 
