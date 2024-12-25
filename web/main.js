@@ -4,12 +4,12 @@ import { api } from "../../scripts/api.js";
 const propertiesMapping = {};
 const nodes = [];
 
-function drawTextWithLineBreaks(ctx, text, x, y, maxWidth, lineHeight) {
+function drawTextWithLineBreaks(ctx, text, x, y, maxWidth, maxHeight, lineHeight) {
   const words = text.split(' '); // 将文本按空格分割为单词
   let line = ''; // 当前行的文本
   let currentY = y; // 当前行的Y坐标
 
-  words.forEach(word => {
+  for (const word of words) {
     const testLine = line + (line ? ' ' : '') + word; // 尝试添加单词到当前行
     const metrics = ctx.measureText(testLine); // 测量当前行宽度
     //console.log('metrics.width', metrics.width, 'maxWidth', maxWidth);
@@ -18,11 +18,12 @@ function drawTextWithLineBreaks(ctx, text, x, y, maxWidth, lineHeight) {
       ctx.fillText(line, x, currentY);
       line = word; // 将当前单词移到下一行
       currentY += lineHeight; // 更新Y坐标
+      if (currentY > maxHeight) return;
     } else {
       // 否则，将单词添加到当前行
       line = testLine;
     }
-  });
+  };
 
   // 绘制最后一行
   if (line) {
@@ -39,9 +40,9 @@ app.registerExtension({
       if (this.flags.collapsed) return;
       if (!this.properties.curr) return;
       ctx.save();
-      ctx.font = "16px serif";
+      ctx.font = "12px serif";
       if (typeof this.properties.curr === 'string') {
-        drawTextWithLineBreaks(ctx, this.properties.curr, 10, 35, this.size[0] - 20, 16);
+        drawTextWithLineBreaks(ctx, this.properties.curr, 10, 35, this.size[0] - 20, this.size[1], 12);
       } else {
         ctx.fillText(this.properties.curr, 10, 50);
       }
